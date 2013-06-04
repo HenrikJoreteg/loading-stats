@@ -1,0 +1,18 @@
+{
+  "author": "Henrik Joreteg <henrik@andyet.net>",
+  "name": "loading-stats",
+  "description": "For tracking web app loading performance for single page apps.",
+  "version": "0.0.1",
+  "tags": ["browser", "clientmodules", "webapps"],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/henrikjoreteg/loading-stats.git"
+  },
+  "devDependencies": {
+    "precommit-hook": "0.3.4"
+  },
+  "scripts": {
+    "test": "node test.js"
+  },
+  "main": "./loading-stats.js"
+}
