@@ -10,13 +10,16 @@ var times = window.times,
 
 
 module.exports = {
-    recordEvent: function (name) {
+    recordTime: function (name) {
         times[name] = new Date;
+    },
+    recordStat: function (name, value) {
+        stat[name] = value;
     },
     getSummary: function () {
         for (var name in times) {
             if (name !== 'start') {
-                stat['ms to ' + name] = this.sinceStart(times[name]);
+                stat[name] = this.sinceStart(times[name]);
             }
         }
         return stat;

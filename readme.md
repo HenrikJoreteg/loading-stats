@@ -6,7 +6,11 @@ You can see how caching strategies affect load times and also make sure you're n
 
 This is a very simple client side module (compatible with [clientmodules](https://github.com/henrikjoreteg/clientmodules) and [browserify](https://github.com/substack/node-browserify)) for tracking that load time and the various pieces of it and is designed to be used for reporting back to a metrics service. At &yet we send this as metadata for our "applicationLoaded" event that gets sent to (usually) mixpanel. But which one doesn't really matter, this just tracks the times and reports them. 
 
-Here's how it works.
+Ultimately this approach is still flawed. The real way to do this is using the HTML5 performance API: http://www.html5rocks.com/en/tutorials/webperformance/basics/.
+
+The trick is, it isn't basically only available in Chrome at the moment, which doesn't give us a very complete picture. So we do this for now to get some idea. I'm trying to figure out a good way to use the performance API if it exists without muddying up the data here.
+
+Anyway, here's how it works.
 
 
 ## How to use it
@@ -19,7 +23,7 @@ Add this bit of vanilla JS to your base HTML as high up in the `<head>` as you c
 <script src="app.js"></script>
 ```
 
-Then at various points that you want to track within your app's load sequence, just call `recordEvent()` with whatever description makes sense for your app:
+Then at various points that you want to track within your app's load sequence, just call `recordTime()` with whatever description makes sense for your app:
 
 
 ```js
@@ -27,10 +31,10 @@ Then at various points that you want to track within your app's load sequence, j
 var loadStats = require('loading-stats');
 
 // for example
-loadStats.recordEvent('begin launch sequence');
+loadStats.recordTime('begin launch sequence');
 
 // sometime later you may do...
-loadStats.recordEvent('initial data fetched');
+loadStats.recordTime('initial data fetched');
 
 // then get your summary and send it off to your
 // metrics service. For example
@@ -42,13 +46,28 @@ that looks like this. With each event being miliseconds
 from the start time we put in our HTML above.
 
 {
-    'ms to begin launch sequence': 100,
-    'ms to begin launch sequence': 323,
-    'ms to fully loaded': 431
+    'begin launch sequence': 100,
+    'begin launch sequence': 323,
+    'fully loaded': 431
 }
 */
 
 ```
+
+There's also a `recordStat` that just takes a name/value. Say you want to count bytes of initial data or something.
+
+```js
+
+var loadStats = require('loading-stats');
+
+// this just adds it in so when you call .getSummary()
+// this will be listed in there too. 
+loadStats.recordStat('number of teams', teams.length);
+
+```
+
+This is useful since additional stats about the amount of data we're pulling down or if they're a power user who has gobs of data, that will help give context to and explain the longer load times.
+
 
 ## Getting *real* stats in the wild is awesome
 

@@ -2,7 +2,7 @@
   "author": "Henrik Joreteg <henrik@andyet.net>",
   "name": "loading-stats",
   "description": "For tracking web app loading performance for single page apps.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "tags": ["browser", "clientmodules", "webapps"],
   "repository": {
     "type": "git",
